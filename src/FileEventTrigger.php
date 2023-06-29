@@ -6,9 +6,12 @@ namespace AUS\ServerSendEvents;
 
 use RuntimeException;
 
-final readonly class FileEventTrigger
+final class FileEventTrigger
 {
-    public function __construct(private ?ServerSendEventStream $stream = null, private string $directory = __DIR__ . '/../__data', private int $usleepTimer = 100_000)
+    /** @var array<string, int>  */
+    private array $initalTimes = [];
+
+    public function __construct(private readonly ?ServerSendEventStream $stream = null, private readonly string $directory = __DIR__ . '/../__data', private readonly int $usleepTimer = 100_000)
     {
         if (mkdir($concurrentDirectory = $this->directory, 0777, true)) {
             return;
@@ -30,11 +33,12 @@ final readonly class FileEventTrigger
     {
         $filename = $this->directory . '/' . $eventName;
         clearstatcache(true);
-        $initalTime = file_exists($filename) ? filemtime($filename) : 0;
+        $this->initalTimes[$eventName] ??= (int)(file_exists($filename) ? filemtime($filename) : 0);
         do {
             clearstatcache(true);
-            $mtime = file_exists($filename) ? filemtime($filename) : 0;
-            if ($mtime > $initalTime) {
+            $mtime = (int)(file_exists($filename) ? filemtime($filename) : 0);
+            if ($mtime > $this->initalTimes[$eventName]) {
+                $this->initalTimes[$eventName] = $mtime;
                 return;
             }
 
