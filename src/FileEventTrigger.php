@@ -8,7 +8,7 @@ use RuntimeException;
 
 final class FileEventTrigger
 {
-    /** @var array<string, int>  */
+    /** @var array<string, float>  */
     private array $initalTimes = [];
 
     public function __construct(private readonly ?ServerSendEventStream $stream = null, private readonly string $directory = __DIR__ . '/../__data', private readonly int $usleepTimer = 100_000)
@@ -26,17 +26,18 @@ final class FileEventTrigger
 
     public function trigger(string $eventName): void
     {
-        touch($this->directory . '/' . $eventName);
+        $filename = $this->directory . '/' . $eventName;
+        file_put_contents($filename, microtime(true));
     }
 
     public function sleepUntilTrigger(string $eventName, int $watchUntil = 0): void
     {
         $filename = $this->directory . '/' . $eventName;
         clearstatcache(true);
-        $this->initalTimes[$eventName] ??= (int)(file_exists($filename) ? filemtime($filename) : 0);
+        $this->initalTimes[$eventName] ??= (float)(file_exists($filename) ? file_get_contents($filename) : 0);
         do {
             clearstatcache(true);
-            $mtime = (int)(file_exists($filename) ? filemtime($filename) : 0);
+            $mtime = (float)(file_exists($filename) ? file_get_contents($filename) : 0);
             if ($mtime > $this->initalTimes[$eventName]) {
                 $this->initalTimes[$eventName] = $mtime;
                 return;
