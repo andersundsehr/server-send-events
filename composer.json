@@ -11,10 +11,10 @@
   ],
   "require": {
     "php": "~8.2.0",
-    "psr/http-message": "^2.0"
+    "psr/http-message": "^1.1 || ^2.0"
   },
   "require-dev": {
-    "pluswerk/grumphp-config": "^6.7"
+    "pluswerk/grumphp-config": "^6.8"
   },
   "autoload": {
     "psr-4": {
