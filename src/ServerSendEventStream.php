@@ -66,7 +66,7 @@ final class ServerSendEventStream
         }
     }
 
-    public static function isEventStream(RequestInterface $request = null): bool
+    public static function isEventStream(?RequestInterface $request = null): bool
     {
         $accept = $request?->getHeaderLine('Accept') ?? $_SERVER['HTTP_ACCEPT'] ?? '';
         return $accept === 'text/event-stream';
