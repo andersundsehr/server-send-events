@@ -10,11 +10,11 @@
     }
   ],
   "require": {
-    "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+    "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
     "psr/http-message": "^1.1 || ^2.0"
   },
   "require-dev": {
-    "pluswerk/grumphp-config": "^10"
+    "pluswerk/grumphp-config": "^10 || ^11"
   },
   "autoload": {
     "psr-4": {
@@ -23,6 +23,7 @@
   },
   "config": {
     "allow-plugins": {
+      "a9f/fractor-extension-installer": true,
       "ergebnis/composer-normalize": true,
       "phpro/grumphp": true,
       "phpstan/extension-installer": true,
