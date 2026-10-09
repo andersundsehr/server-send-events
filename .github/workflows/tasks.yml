@@ -23,4 +23,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.php }}-composer-
       - run: composer install --no-interaction --no-progress
+      - run: composer check-platform-reqs
+      - run: composer audit --abandoned=report
       - run: ./vendor/bin/grumphp run --ansi
